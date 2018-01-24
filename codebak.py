@@ -162,3 +162,61 @@ place = models.OneToOneField(Place, verbose_name="related place")
 
 ####
 
+from django.db import models
+
+class Person(models.Model):
+    name = models.CharField(max_length=128)
+
+    def __str__(self):              # __unicode__ on Python 2
+        return self.name
+
+class Group(models.Model):
+    name = models.CharField(max_length=128)
+    members = models.ManyToManyField(Person, through='Membership')
+
+    def __str__(self):              # __unicode__ on Python 2
+        return self.name
+
+class Membership(models.Model):
+    person = models.ForeignKey(Person)
+    group = models.ForeignKey(Group)
+    date_joined = models.DateField()
+    invite_reason = models.CharField(max_length=64)
+
+####
+from blog.models import Entry
+entry = Entry.objects.get(pk=1)
+cheese_blog = Blog.objects.get(name="Cheddar Talk")
+entry.blog = cheese_blog
+entry.save()
+
+####外键
+>>> john = Author.objects.create(name="John")
+>>> paul = Author.objects.create(name="Paul")
+>>> george = Author.objects.create(name="George")
+>>> ringo = Author.objects.create(name="Ringo")
+>>> entry.authors.add(john, paul, george, ringo)
+
+#### 多对多
+使用过滤器获取特定对象¶
+all() 方法返回了一个包含数据库表中所有记录查询集。但在通常情况下，你往往想要获取的是完整数据集的一个子集。
+要创建这样一个子集，你需要在原始的的查询集上增加一些过滤条件。两个最普遍的途径是：
+filter(**kwargs)
+返回一个新的查询集，它包含满足查询参数的对象。
+exclude(**kwargs)
+返回一个新的查询集，它包含不满足查询参数的对象。
+查询参数（上面函数定义中的**kwargs）需要满足特定的格式，下面字段查询一节中会提到。
+举个例子，要获取年份为2006的所有文章的查询集，可以使用filter()方法：
+Entry.objects.filter(pub_date__year=2006)
+利用默认的管理器，它相当于：
+Entry.objects.all().filter(pub_date__year=2006)
+查询集的筛选结果本身还是查询集，所以可以将筛选语句链接在一起。像这样：
+>>> Entry.objects.filter(
+...     headline__startswith='What'
+... ).exclude(
+...     pub_date__gte=datetime.date.today()
+... ).filter(
+...     pub_date__gte=datetime(2005, 1, 30)
+... )
+####查询
+
