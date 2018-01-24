@@ -219,4 +219,39 @@ Entry.objects.all().filter(pub_date__year=2006)
 ...     pub_date__gte=datetime(2005, 1, 30)
 ... )
 ####查询
+字段+ __ (动词）
+exact  精确
+iexact  忽略大小精确
+
+Entry.objects.get(id__exact=14)
+Entry.objects.get(id__exact=None)
+
+SELECT ... WHERE id = 14;
+SELECT ... WHERE id IS NULL;
+
+contains  区分大小写的包含例子
+icontains  区分大小写的包含例子
+
+Entry.objects.get(headline__contains='Lennon')
+
+Entry.objects.filter(id__gt=4)
+
+gte >=
+
+lt < 
+
+lte <=
+
+in 给定的列表
+
+startswith 区分大小写，开始位置匹配
+Entry.objects.filter(headline__startswith='Will')
+
+istartswith 不区分大小写
+
+Entry.objects.filter(headline__istartswith='will')
+
+endswith
+
+iendswith
 
