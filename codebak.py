@@ -255,3 +255,31 @@ endswith
 
 iendswith
 
+range 范围测试（包含于之中）。
+
+import datetime
+start_date = datetime.date(2005, 1, 1)
+end_date = datetime.date(2005, 3, 31)
+Entry.objects.filter(pub_date__range=(start_date, end_date))
+
+year
+month
+day
+week_day
+hour
+minute
+second
+
+Entry.objects.filter(pub_date__year=2005)
+Entry.objects.filter(pub_date__month=12)
+Entry.objects.filter(pub_date__day=3)
+Event.objects.filter(timestamp__hour=23)
+
+
+isnull 是否为空
+search 类似全文搜索
+
+// 正则// 
+Entry.objects.get(title__regex=r'^(An?|The) +')
+
+iregex // 不区分大小写的正则
