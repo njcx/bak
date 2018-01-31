@@ -45,3 +45,21 @@ def get_name(request):
 True
 >>> f.cleaned_data
 {'cc_myself': True, 'message': 'Hi there', 'sender': 'foo@example.com', 'subject': 'hello'}
+
+from django.forms import Form
+
+class ContactForm(Form):
+    error_css_class = 'error'
+    required_css_class = 'required'
+
+
+>>> f = ContactForm(data)
+>>> print(f.as_table())
+<tr class="required"><th><label class="required" for="id_subject">Subject:</label>    ...
+<tr class="required"><th><label class="required" for="id_message">Message:</label>    ...
+<tr class="required error"><th><label class="required" for="id_sender">Sender:</label>      ...
+<tr><th><label for="id_cc_myself">Cc myself:<label> ...
+>>> f['subject'].label_tag()
+<label class="required" for="id_subject">Subject:</label>
+>>> f['subject'].label_tag(attrs={'class': 'foo'})
+<label for="id_subject" class="foo required">Subject:</label>
